@@ -1,0 +1,76 @@
+<!DOCTYPE >
+<html >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="keywords" content="实名认证,初到租房,房源管家" />
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <link type="text/css" rel="stylesheet" href="./css/base.css">
+    <title>实名认证</title>
+    <style>
+.renzbox{width:100%;}
+ .transform_center{ position: absolute; top:50%; left:50%; -webkit-transform:translate(-50%,-50%); -moz-transform:translate(-50%,-50%);
+-ms-transform:translate(-50%,-50%); transform:translate(-50%,-50%); }
+.topbox{width: 4.68rem; height: 3.866667rem; background: url(./images/stautbj.png) no-repeat;background-size: contain;position: relative; margin:0 auto;}
+.dwtips{position: absolute;right:10px;bottom:6px;}
+.stauticon{width: 1.6rem;height: 1.6rem;}
+ .tipsbox{margin: 1rem auto 0;width: 100%;}
+ .titext{color: rgb(32, 32, 32);font-size: 17px;line-height: 1rem;}
+ [data-dpr="2"] .titext{font-size:34px} [data-dpr="3"] .titext{font-size:51px}
+.p13{color: rgb(140, 140, 146);font-size: 13px;line-height: .8rem;}
+[data-dpr="2"] .p13{font-size:26px} [data-dpr="3"] .p13{font-size:39px}
+.loading{
+ width: 1.7rem;height: 1.7rem;
+ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='80' height='80' viewBox='0 0 40 40' enable-background='new 0 0 40 40' xml:space='preserve'%3E %3Cpath fill='%23e1e1e1' d='M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z' /%3E %3Cpath fill='%232aa2ff' d='M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0C22.32,8.481,24.301,9.057,26.013,10.047z'%3E %3CanimateTransform attributeType='xml' attributeName='transform' type='rotate' from='0 20 20' to='360 20 20' dur='0.7s' repeatCount='indefinite' /%3E %3C/path%3E %3C/svg%3E");
+ background-size: contain;
+}
+.replaybtn{width:160px;height:60px;background:#fff;border:1px solid #8c8c92; color:#8c8c92;font-size:14px;}
+[data-dpr="2"] .replaybtn{font-size:28px} [data-dpr="3"] .replaybtn{font-size:42px}
+    </style>
+
+</head>
+<body >
+<section class="item-section">
+    <div class="renzbox transform_center" id="renzbox">
+
+    </div>
+
+</section>
+<script>
+    var html1 =`<div class="topbox">
+            <img src="./images/ok.png" alt="" class="stauticon dwtips">
+        </div>
+        <div class="tipsbox center">
+            <h2 class="titext">认证成功</h2>
+            <p class="p13">2s后自动返回认证入口页面</p>
+        </div>`;
+    var html2 =`<div class="topbox">
+            <img src="./images/erro.png" alt="" class="stauticon dwtips">
+        </div>
+        <div class="tipsbox center">
+            <h2 class="titext">认证失败</h2>
+            <p class="p13">请确保照片清晰和人证匹配！建议重新认证试试</p>
+        </div>`;
+    var html3 =`<div class="topbox">
+            <div class="loading dwtips"></div>
+        </div>
+        <div class="tipsbox center">
+            <h2 class="titext">认证中…</h2>
+            <p class="p13">认证最长可能需要10s，请耐心等待</p>
+<button class="replaybtn">重新认证</button>
+        </div>`;
+    //document.querySelector("#renzbox").innerHTML=html3;
+
+    // 获取地址栏参数
+    function getPram(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]);
+        return '';
+    }
+</script>
+</body>
+</html>
