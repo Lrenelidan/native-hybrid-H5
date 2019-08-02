@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <script type="text/javascript" src="./js/flexible.js"></script>
+  <!-- <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script> -->
+  <link type="text/css" rel="stylesheet" href="./css/base.css">
+    <title>身份证识别</title>
+    <style>
+ .item-section{padding-bottom: 2.4rem;}
+ .header{width: 100%; max-width: 10rem;margin: 0 auto; position: relative;height: 1.173333rem;line-height: 1.173333rem;border-bottom: .0133rem solid #ececec;}
+ .h2{font-size:17px;font-weight: 600;}
+ [data-dpr="2"] .h2{font-size:33px}
+ [data-dpr="3"] .h2{font-size:51px}
+.backcancel{position: absolute;right: .133333rem;top: 0;font-size:15px;}
+[data-dpr="2"] .backcancel{font-size:30px} [data-dpr="3"] .backcancel{font-size:45px}
+ .texth2{color:#202020;font-size: 15px;line-height: 1.2rem;}
+ [data-dpr="2"] .texth2{font-size:30px} [data-dpr="3"] .texth2{font-size:45px}
+.ptext{font-size: 13px; color: #8c8c92;line-height: .8rem;margin-top: 0.3rem;}
+[data-dpr="2"] .ptext{font-size:26px} [data-dpr="3"] .ptext{font-size:39px}
+.main{width: 100%; max-width: 10rem;margin: 0 auto;}
+.image-list{width: 7rem; margin: 0.4rem auto 0; position: relative;}
+.image-list img{width: 6.666667rem;height: 4rem;border-radius: .133333rem;}
+.footer{position: absolute;bottom: 0;left: 0;right: 0;margin: 0 auto;}
+.bottom-btnbox{padding-top: .4rem;height: 2.133333rem; background: #fff;box-shadow: 0.0133rem 0 .133rem #eee;}
+ .btnbox{width: 8.3rem;height: 1.1rem;background: -webkit-linear-gradient(left, #ffe900, #fed700); background:
+-o-linear-gradient(right, #ffe900, #fed700); background: -moz-linear-gradient(right, #ffe900, #fed700); background: linear-gradient(to
+right, #ffe900, #fed700); /* 标准的语法（必须放在最后）*/font-size: 17px; font-weight: 500; border: none; border-radius: 50px;line-height:
+1.1rem;box-shadow: .026667rem .04rem .133333rem rgba(77, 69, 0, 0.2);}
+[data-dpr="2"] .btnbox{font-size:34px} [data-dpr="3"] .btnbox{font-size:51px}
+.fileBtn{opacity: 0;width: 1.4rem;height: 1.4rem;border: none; border-radius: 50%;position: absolute;right:-5px;bottom:-10px;z-index: 2;}
+ .paizhao{width: 1.4rem;height: 1.4rem; color: #fff;font-size: 15px; border-radius: 50%; position: absolute;right:-5px;bottom:-10px;
+ background: -webkit-linear-gradient(#86a8ff, #0072ff);
+background: -o-linear-gradient(#86a8ff, #0072ff);
+background: -moz-linear-gradient( #86a8ff,#0072ff);
+background: linear-gradient(#86a8ff, #0072ff); /* 标准的语法（必须放在最后）*/
+border: .053333rem solid #fff ;
+box-shadow: 0.0133rem 0 0.2rem #eee;
+}
+[data-dpr="2"] .paizhao{font-size:30px} [data-dpr="3"] .paizhao{font-size:45px}
+    html,body {
+        height: 100vh;
+    }
+</style>
+<script type="text/javascript" src="./js/index.js"></script>
+</head>
+
+<body>
+
+<section class="item-section">
+  <header class="header">
+    <h1 class="h2 center">身份证识别</h1>
+    <span class="backcancel" id="backcancel" onclick="backcancel()">取消认证</span>
+  </header>
+  <section class="main">
+    <h3 class="ptext center">请拍摄以下证件照片，注意尽可能保证照片清晰度！</h3>
+    <div class="image-list center">
+      <h2 class="texth2 ">身份证人像面示例图</h2>
+      <img src="./images/sfz01.jpg" id="img1" />
+      <button type="button" class="paizhao" onclick="upload(2)">拍照</button>
+      <!-- <input id="fileBtn1" class="fileBtn" type="file" onchange="fileupload('#fileBtn1', '#img1', 2);" accept="image/*" capture="camera" /> -->
+    </div>
+    <div class="domediv center" style="display: none"></div>
+    <div class="image-list center">
+      <h2 class="texth2 ">身份证国徽面示例图</h2>
+      <img src="./images/sfz02.jpg" id="img2" />
+      <button type="button" class="paizhao" onclick="upload(3)">拍照</button>
+      <!-- <input id="fileBtn2" class="fileBtn" type="file" onchange="fileupload('#fileBtn2', '#img2', 3);" accept="image/*" capture="camera"
+/> -->
+    </div>
+    <div class="domediv2 center" style="display: none"></div>
+  </section>
+  <footer class="footer center">
+    <div class="bottom-btnbox ">
+        <button type="button"  onclick="getbutton()" class="btnbox">提交</button>
+    </div>
+  </footer>
+
+</section>
+<div class="ajax_tip"></div>
+
+
+<script type="text/javascript">
+var that = this;
+ var uploadtype = [];
+ var file1='',file2='';
+
+function uploadimg(type) {
+    if (type==2) {
+        var params={cardType:2, file: file1}
+       // document.querySelector(".domediv").innerHTML += JSON.stringify(params).substring(0,25);
+    } else if(type==3){
+        var params={cardType:3, file: file2}
+        // document.querySelector(".domediv").innerHTML += JSON.stringify(params).substring(0,25);
+    }
+     ajax_method('APP-'+ acesToken, uid, '/lessee/personAuth/ocrScan', params, 'POST',{
+        success:function(res){
+            var updata = eval("("+res+")");
+            if (updata.code==10000) {
+               uploadtype.push(type);
+               // console.log(uploadtype);
+               setTimeout(() => {
+                    if (uploadtype.length>1) {
+                        window.location.href ='./facerecogn.html';
+                    }
+                }, 1000);
+            }else {
+                uploadtype = [];
+                showError(updata.msg+',请重新拍照');
+            }
+            // document.querySelector(".domediv2").innerHTML += JSON.stringify(res);
+             return uploadtype;
+        },error:function(res){
+            console.log('error',res);
+            showError('error'+res);
+        }
+    });
+
+}
+function getbutton() {
+    // alert('shhhhhhhhhhhhhhhhh');
+ var obj = document.querySelector(".btnbox");
+    if (file1 != '' && file2 != '') {
+        showError('上传认证中...');
+       obj.setAttribute('disabled', 'disabled');
+        var uploadimg01 = uploadimg(2);
+        var uploadimg02 = uploadimg(3);
+        setTimeout(() => {
+            obj.removeAttribute('disabled');
+        }, 10000);
+    } else {
+       showError('请同时上传身份证人像面和身份证国徽面照片');
+    }
+
+}
+function backcancel(){
+    if (!isAndroid) {
+        setupWebViewJavascriptBridge(function (bridge) {
+            bridge.callHandler('jumpToHome', function callback(response) {
+                document.querySelector(".domediv").innerHTML = JSON.stringify(response);
+            })
+        })
+    }else{
+        window.DataAnalysis.startMainActivity();
+    }
+    // window.location.href ='./attestation.html';
+};
+function upload(n){
+    // alert('开始拍照')
+    if (!isAndroid) {
+        setupWebViewJavascriptBridge(function (bridge) {
+            bridge.registerHandler('getphone', function(data, responseCallback) {
+                // document.querySelector(".domediv").innerHTML = '执行getphone----';
+                responseCallback(data)
+                if (data.obj==2) {
+                    document.querySelector("#img1").setAttribute("src", "data:image/jpeg;base64,"+data.imageStr);
+                    file1 = data.imageStr;
+                } else if (data.obj==3){
+                    document.querySelector("#img2").setAttribute("src", "data:image/jpeg;base64,"+data.imageStr);
+                    file2 = data.imageStr;
+                }
+            })
+            bridge.callHandler('openCamera', {'obj': n},
+                 function callback(response) {
+                   document.querySelector(".domediv").innerHTML = JSON.stringify(response);
+            })
+
+        })
+    }else{
+        // alert('安卓开始拍照')
+        // var pzphone = window.DataAnalysis.startCamera(n);
+        window.WebViewJavascriptBridge.send({'obj': n }, function (responseData) {
+           document.querySelector(".domediv").innerHTML = JSON.stringify(responseData);
+        });
+        window.WebViewJavascriptBridge.callHandler('startCamera', { 'obj': n },
+            function (responseData) {
+                document.querySelector(".domediv").innerHTML = JSON.stringify(response);
+            })
+        // 注册回调函数，第一次连接时调用 初始化函数
+        connectWebViewJavascriptBridge(function (bridge) {
+            // 初始化
+            bridge.init(function (message, responseCallback) {
+                console.log('JS got a message', message);
+                var data = {'Javascript Responds': '测试中文!'};
+                console.log('JS responding with', data);
+                responseCallback(data);
+            });
+            // Android调用js方法：getAndroidImg方法名称需要保持一致 ，并返回给Android通知
+            bridge.registerHandler("getAndroidImg", function (data, responseCallback) {
+                alert('Android调用js方法')
+                document.querySelector(".domediv").innerHTML = 'Android调用js方法返回的数据---'+ data;
+                var responseData = 'js指定接收完毕，并回传数据给java';
+                responseCallback(responseData); //回传数据给java
+                if (data.obj == 2) {
+                    document.querySelector("#img1").setAttribute("src", data.img);
+                    file1 = data.img.split(',')[1];
+                    document.querySelector(".domediv").innerHTML = JSON.stringify(data).substring(0, 80);
+                } else if (data.obj == 3) {
+                    document.querySelector("#img2").setAttribute("src", data.img);
+                    file2 = data.img.split(',')[1];
+                    document.querySelector(".domediv2").innerHTML = JSON.stringify(data).substring(0, 80);
+                }
+            });
+        })
+
+
+    }
+
+
+}
+/* app调用，传照片*/
+function getAndroidAz(obj, result){
+ //alert('安卓getAndroidAz');
+ // document.querySelector(".domediv").innerHTML = JSON.stringify(result.img);
+    if (obj==2) {
+        //showError('安卓getAndroidAz00'+obj);
+        document.querySelector("#img1").setAttribute("src", result.img);
+        file1= result.img.split(',')[1];
+        document.querySelector(".domediv").innerHTML = JSON.stringify(result).substring(0,80);
+    } else if (obj==3){
+        //showError('安卓getAndroidAz11'+obj);
+        document.querySelector("#img2").setAttribute("src", result.img);
+        file2= result.img.split(',')[1];
+        document.querySelector(".domediv").innerHTML = '安卓执行22----'+ JSON.stringify(result).substring(0,80);
+    }
+}
+function fileupload(c, d, n){
+ var $c = document.querySelector(c), $d = document.querySelector(d);
+ var reader = new FileReader();
+    var  file = $c.files[0];
+    console.log($c.files);
+    reader.readAsDataURL(file);
+    reader.onload = function(e){
+        $d.setAttribute("src", e.target.result);
+        var basejpg = e.target.result.split(',')[1];
+        // console.log(basejpg);
+        if (n==2) {
+            file1= basejpg;
+        } else if (n==3){
+            file2= basejpg;
+        }
+    };
+
+}
+  </script>
+</body>
+
+</html>
