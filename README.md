@@ -12,7 +12,7 @@
 tab.html页面是增加了tab切换的列表
 
 ### h5实名认证
-在文件夹"shiminrenzheng"中，对底本的安卓手机有兼容问题
+在文件夹"shiminrenzheng"中，对低版本系统的安卓手机有兼容问题
 
 
 
