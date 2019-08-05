@@ -6,13 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta content="yes" name="apple-mobile-web-app-capable">
   <meta content="yes" name="apple-touch-fullscreen">
-  <meta content="telephone=no,email=no" name="format-detection">
-  <script type="text/javascript" src="./js/flexible.js"></script>
+  <meta name="format-detection" content="telephone=yes" />
+  <meta http-equiv="x-rim-auto-match" content="none">
+  <meta name="full-screen" content="yes">
+  <meta name="x5-fullscreen" content="true">
+  <script type="text/javascript" src="../js/flexible.js"></script>
   <!-- <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script> -->
-  <link type="text/css" rel="stylesheet" href="./css/base.css">
+  <link type="text/css" rel="stylesheet" href="../css/base.css">
     <title>人脸识别</title>
     <style>
- .item-section{padding-bottom: 2.4rem;}
+ .item-section{padding-bottom: 1.8rem;}
  .header{width: 100%; max-width: 10rem;margin: 0 auto; position: relative;height: 1.173333rem;line-height: 1.173333rem;border-bottom: .0133rem solid #ececec;}
  .h2{font-size:17px;font-weight: 600;}
  [data-dpr="2"] .h2{font-size:33px}
@@ -27,7 +30,7 @@
 .image-list2{width: 8.2rem; margin: 0.4rem auto 0; position: relative;}
 .image-list2 img{width: 8.133333rem;height: 9.773333rem;border-radius: .133333rem;}
 .footer{position: absolute;bottom: 0;left: 0;right: 0;margin: 0 auto;}
-.bottom-btnbox{padding-top: .4rem;height: 2.133333rem; background: #fff;box-shadow: 0.0133rem 0 .133rem #eee;}
+.bottom-btnbox{padding-top: .25rem;height: 1.7rem; background: #fff;box-shadow: 0.0133rem 0 .133rem #eee;}
  .btnbox{width: 8.3rem;height: 1.1rem;background: -webkit-linear-gradient(left, #ffe900, #fed700); background: -o-linear-gradient(right,
 #ffe900, #fed700); background: -moz-linear-gradient(right, #ffe900, #fed700); background: linear-gradient(to right, #ffe900,
 #fed700); /* 标准的语法（必须放在最后）*/font-size: 17px; font-weight: 500; border: none; border-radius: 50px;line-height: 1.1rem;box-shadow:
@@ -47,7 +50,7 @@ box-shadow: 0.0133rem 0 0.2rem #eee;
 .renzbox{width:100%;}
  .transform_center{ position: absolute; top:50%; left:50%; -webkit-transform:translate(-50%,-50%); -moz-transform:translate(-50%,-50%);
 -ms-transform:translate(-50%,-50%); transform:translate(-50%,-50%); }
-.topbox{width: 4.68rem; height: 3.866667rem; background: url(./images/stautbj.png) no-repeat;background-size: contain;position: relative; margin:0 auto;}
+.topbox{width: 4.68rem; height: 3.866667rem; background: url(../images/stautbj.png) no-repeat;background-size: contain;position: relative; margin:0 auto;}
 .dwtips{position: absolute;right:10px;bottom:6px;}
 .stauticon{width: 1.6rem;height: 1.6rem;}
  .tipsbox{margin: 1rem auto 0;width: 100%;}
@@ -66,7 +69,7 @@ box-shadow: 0.0133rem 0 0.2rem #eee;
         height: 100vh;
     }
 </style>
-<script type="text/javascript" src="./js/index.js"></script>
+<script type="text/javascript" src="../js/index.js"></script>
 </head>
 
 <body>
@@ -79,9 +82,9 @@ box-shadow: 0.0133rem 0 0.2rem #eee;
     <h3 class="ptext center">请拍摄以下照片，注意尽可能保证照片清晰度！</h3>
     <div class="image-list2 center">
       <h2 class="texth2 ">人脸照片示例图</h2>
-      <img src="./images/faceimg.jpg" id="img3" />
-      <button class="paizhao" onclick="upload(1)">拍照</button>
-      <!-- <input id="fileBtn3" class="fileBtn" type="file" onchange="upload('#fileBtn3', '#img3');" accept="image/*" capture="camera" /> -->
+      <img src="../images/faceimg.jpg" id="img3" />
+      <button class="paizhao" >拍照</button>
+      <input id="fileBtn3" class="fileBtn" type="file" onchange="fileupload('#fileBtn3', '#img3');" accept="image/*" capture="camera" />
     </div>
 <div class="domediv center" style="display: none"></div>
   </section>
@@ -97,39 +100,114 @@ box-shadow: 0.0133rem 0 0.2rem #eee;
 </section>
 <div class="ajax_tip"></div>
   <script type="text/javascript">
+  var acesToken, uid, rqhead;
 var rxtype='';
  var file1='';
-//  acesToken = 'WEB-'+ getPram('token');
-//  uid = getPram('uid');
+ var html1 =`
+ <div class="topbox">
+     <img src="../images/ok.png" alt="" class="stauticon dwtips">
+ </div>
+ <div class="tipsbox center">
+     <h2 class="titext">认证成功</h2>
+     <p class="p13">2s后自动返回认证入口页面</p>
+ </div>`;
+ var html2 =`
+ <div class="topbox">
+     <img src="../images/erro.png" alt="" class="stauticon dwtips">
+ </div>
+ <div class="tipsbox center">
+     <h2 class="titext">认证失败</h2>
+     <p class="p13">请确保照片清晰和人证匹配！建议重新认证试试</p>
+     <button class="replaybtn" onclick="gobackrz()">重新认证</button>
+ </div>`;
+ var html3 =`
+ <div class="topbox">
+     <div class="loading dwtips"></div>
+ </div>
+ <div class="tipsbox center">
+     <h2 class="titext">认证中…</h2>
+     <p class="p13">认证最长可能需要10s，请耐心等待</p>
+ </div>`;
+ window.onload = function() {
+    if (uid ==''&& !version) {
+        if (!isAndroid) {
+            //iOS获取token
+            setupWebViewJavascriptBridge(function (bridge) {
+                bridge.callHandler("getUserData", function (response) {
+                    acesToken = response.token;
+                    uid = response.userId;
+                    rqhead = {
+                        'Access-Token': 'APP-' + acesToken, 'User-Id': uid
+                    };
+                    //$("#domediv").html('rqhead=IOS='+JSON.stringify(rqhead));
+                })
+            })
+        } else {
+            //安卓获取token
+            if(uid ==''){
+                var infodata = window.DataAnalysis.getAppInfo();
+                infodata = JSON.parse(infodata);
+                acesToken = infodata.token;
+                uid = infodata.id;
+                rqhead = {
+                    'Access-Token': 'APP-' + acesToken, 'User-Id': uid
+                };
+            }
+            //$("#domediv").html('rqhead=安卓='+JSON.stringify(rqhead));
+        }
+    }
+};
+
+/* 传照片*/
+function fileupload(c, d, n){
+ var $c = document.querySelector(c), $d = document.querySelector(d);
+ var reader = new FileReader();
+    var  file = $c.files[0];
+    console.log($c.files);
+    reader.readAsDataURL(file);
+    reader.onload = function(e){
+        $d.setAttribute("src", e.target.result);
+        var basejpg = e.target.result.split(',')[1];
+        // console.log(basejpg);
+        file1 = basejpg;
+    };
+
+}
+
 function uploadimg() {
     var params={file:file1};
-     ajax_method('APP-'+ acesToken, uid, '/lessee/personAuth/photoAuth', params, 'POST',{
-        success:function(res){
-            console.log('success',res);
-            var updata = eval("("+res+")");
-            if (updata.code==10000) {
-                if (updata.data.authStatus == 1){
-                    rxtype=1;
-                    document.querySelector("#renzbox").innerHTML=html1;
-                    setTimeout(() => {
-                        backcancel();
-                        // window.location.href ='./attestation.html';
-                    }, 2000);
+    if (rqhead.length>0) {
+        ajax_request(rqhead, {
+            type: 'POST',
+            url: 'lessee/personAuth/photoAuth',
+            data: params,
+            success:function(res){
+                var updata = eval("("+res+")");
+                if (updata.code==10000) {
+                    flag = true;
+                    if (updata.data.authStatus == 1){
+                        rxtype=1;
+                        document.querySelector("#renzbox").innerHTML=html1;
+                        setTimeout(function() {
+                            backcancel();
+                        }, 2000);
 
-                }else{
-                    rxtype=0;
-                    // showError(updata.data.msg);
-                    document.querySelector("#renzbox").innerHTML=html2;
+                    }else{
+                        rxtype=0;
+                        // showError(updata.data.msg);
+                        document.querySelector("#renzbox").innerHTML=html2;
+                    }
                 }
-
+            },error:function(res){
+                console.log('error',res);
+                showError('上传失败！');
             }
-            return rxtype;
-        },error:function(res){
-            console.log('error',res);
-            showError('error***'+res);
-        }
-    });
+        });
+    }else{
+        rxtype = true;
+    }
 
+    return rxtype;
 }
 function getbutton() {
     if (file1!='') {
@@ -137,7 +215,7 @@ function getbutton() {
         document.querySelector("#stautsbox").style.display = 'block';
         document.querySelector("#facerebox").style.display = 'none';
         var flieload = uploadimg();
-        setTimeout(() => {
+        setTimeout( function() {
             if (rxtype) {
                document.querySelector("#renzbox").innerHTML=html2;
             }
@@ -149,78 +227,13 @@ function getbutton() {
 }
 
 function backcancel(){
-    if (!isAndroid) {
-        setupWebViewJavascriptBridge(function (bridge) {
-            bridge.callHandler('jumpToHome', function callback(response) {
-                document.querySelector(".domediv").innerHTML = JSON.stringify(response);
-            })
-        })
-    }else{
-        window.DataAnalysis.startMainActivity();
-    }
-//  window.location.href ='./attestation.html';
+  window.location.href ='./attestation.html';
 };
 function gobackrz(){
  window.location.href ='./cardrecogn.html';
 }
-var upload = function(n){
-   if (!isAndroid) {
-        setupWebViewJavascriptBridge(function (bridge) {
-            bridge.registerHandler('getphone', function(data, responseCallback) {
-                document.querySelector(".domediv").innerHTML = '执行getphone----';
-                responseCallback(data)
-                if (data.obj==1) {
-                    document.querySelector("#img3").setAttribute("src", "data:image/jpeg;base64,"+data.imageStr);
-                    file1 = data.imageStr;
-                }
-            })
-            bridge.callHandler('openCamera', {'obj': n},
-                 function callback(response) {
-                   document.querySelector(".domediv").innerHTML = JSON.stringify(response);
-            })
 
-        })
-    }else{
-        //alert('安卓开始拍照')
-        var pzphone = window.DataAnalysis.startCamera(n);
 
-    }
-}
-/* app调用，传照片*/
-function getAndroidAz(obj, result){
- document.querySelector(".domediv").innerHTML = '安卓'+JSON.stringify(result.img);
-    if (obj==1) {
-        //showError('安卓getAndroidAz00'+obj);
-        document.querySelector("#img3").setAttribute("src", result.img);
-        file1= result.img.split(',')[1];
-        document.querySelector(".domediv").innerHTML = JSON.stringify(result).substring(0,25);
-    }
-}
- var html1 =`
-<div class="topbox">
-    <img src="./images/ok.png" alt="" class="stauticon dwtips">
-</div>
-<div class="tipsbox center">
-    <h2 class="titext">认证成功</h2>
-    <p class="p13">2s后自动返回认证入口页面</p>
-</div>`;
-var html2 =`
-<div class="topbox">
-    <img src="./images/erro.png" alt="" class="stauticon dwtips">
-</div>
-<div class="tipsbox center">
-    <h2 class="titext">认证失败</h2>
-    <p class="p13">请确保照片清晰和人证匹配！建议重新认证试试</p>
-<button class="replaybtn" onclick="gobackrz()">重新认证</button>
-</div>`;
-var html3 =`
-<div class="topbox">
-    <div class="loading dwtips"></div>
-</div>
-<div class="tipsbox center">
-    <h2 class="titext">认证中…</h2>
-    <p class="p13">认证最长可能需要10s，请耐心等待</p>
-</div>`;
   </script>
 </body>
 
