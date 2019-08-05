@@ -3,13 +3,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="keywords" content="实名认证,初到租房,房源管家" />
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="yes" name="apple-touch-fullscreen">
-    <meta content="telephone=no,email=no" name="format-detection">
-<script type="text/javascript" src="./js/flexible.js"></script>
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="yes" name="apple-touch-fullscreen">
+<meta name="format-detection" content="telephone=yes" />
+<meta http-equiv="x-rim-auto-match" content="none">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<script type="text/javascript" src="../js/flexible.js"></script>
     <!-- <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script> -->
-    <link type="text/css" rel="stylesheet" href="./css/base.css">
+    <link type="text/css" rel="stylesheet" href="../css/base.css">
     <title>实名认证</title>
     <style>
  .head-top{width: 100%; margin: 0 auto;}
@@ -28,7 +30,7 @@
 .ptext{font-size: 12px; color: rgb(209, 209, 209);line-height: .6rem;margin-bottom: .133rem;}
 [data-dpr="2"] .ptext{font-size:24px} [data-dpr="3"] .ptext{font-size:36px}
 .footer{position: absolute;bottom: 0;left: 0;right: 0;margin: 0 auto;}
-.bottom-btnbox{padding-top: .4rem;height: 2.133333rem;background: #fff;box-shadow: 0.0133rem 0 .133rem #eee;}
+.bottom-btnbox{padding-top: .25rem;height: 1.7rem;background: #fff;box-shadow: 0.0133rem 0 .133rem #eee;}
  .btnbox{width: 8.3rem;height: 1.1rem;background: -webkit-linear-gradient(left, #ffe900, #fed700); background: -o-linear-gradient(right,
 #ffe900, #fed700); background: -moz-linear-gradient(right, #ffe900, #fed700); background: linear-gradient(to right, #ffe900,
 #fed700); /* 标准的语法（必须放在最后）*/font-size: 17px; font-weight: 500; border: none; border-radius: 50px;line-height: 1.1rem;box-shadow:
@@ -41,65 +43,41 @@
 <body >
 <section class="item-section">
     <div class="head-top center">
-        <img src="./images/top2x.jpg" id="topimg" alt="" class="">
+        <img src="../images/top2x.jpg" id="topimg" alt="" class="">
     </div>
     <div class="step-box ">
         <p class="h2 ">仅需2步完成认证：</p>
         <div class="step-item ">
-            <span class="item-icon"><img src="./images/step1.png" alt="" class=""></span>
+            <span class="item-icon"><img src="../images/step1.png" alt="" class=""></span>
             <div class="steptext">
                 <h3 >身份证识别</h3>
                 <p >请提前准备好本人身份证</p>
             </div>
         </div>
         <div class="step-item " style="border-bottom: 1px solid #f5f5f5;">
-            <span class="item-icon"><img src="./images/step2.png" alt="" class=""></span>
+            <span class="item-icon"><img src="../images/step2.png" alt="" class=""></span>
             <div class="steptext">
                 <h3 >人脸识别</h3>
                 <p >请您本人亲自进行</p>
             </div>
         </div>
-        <input  id="imgFile" type="button" onclick="fileupload('#imgFile', '#topimg', 1);" value="点击拍照" style="width: 180px;" />
+        <!-- <input  id="imgFile" type="button" onclick="fileupload('#imgFile', '#topimg', 1);" value="点击拍照" style="width: 180px;" /> -->
     </div>
 
     <footer class="footer center">
         <p class="ptext">本认证所提交资料仅用于账号实名认证审核！ <br>本人知晓并授权进行认证，对认证中的资料真实性负责！</p>
         <div class="bottom-btnbox ">
-
             <button type="button" onclick="renzbtn()" class="btnbox">开始认证</button>
         </div>
     </footer>
 </section>
 </body>
 <script>
-function connectWebViewJavascriptBridge(callback) {
-    //web调提供方法给app调用
-    if (window.WebViewJavascriptBridge) {
-        callback(WebViewJavascriptBridge)
-    } else {
-        document.addEventListener(
-            'WebViewJavascriptBridgeReady'
-            , function() {
-                callback(WebViewJavascriptBridge)
-            },
-            false
-        );
-    }
-}
+
 function renzbtn(){
  window.location.href ='./cardrecogn.html';
 }
-/* app调用，传照片*/
-function getAndroidAz(obj, result){
- alert('安卓getAndroidAz');
-document.querySelector("#topimg").setAttribute("src", result.img);
-}
-function fileupload(c, d, n){
- alert('安卓开始拍照');
- var params = {obj:n};
- window.WebViewJavascriptBridge.callHandler('startCamera', params);
 
-}
 
 </script>
 </html>
